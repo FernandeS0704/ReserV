@@ -1,11 +1,15 @@
 from src import armazenamento
 
 
+def _texto_preenchido(valor):
+    return isinstance(valor, str) and bool(valor.strip())
+
+
 def cadastrar_sala(nome, capacidade, localizacao):
-    if not isinstance(nome, str) or not nome.strip():
+    if not _texto_preenchido(nome):
         raise ValueError("O nome da sala é obrigatório.")
 
-    if not isinstance(localizacao, str) or not localizacao.strip():
+    if not _texto_preenchido(localizacao):
         raise ValueError("A localização da sala é obrigatória.")
 
     if not isinstance(capacidade, int) or capacidade <= 0:
