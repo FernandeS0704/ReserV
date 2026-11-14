@@ -27,3 +27,6 @@ def cadastrar_sala(nome, capacidade, localizacao):
     }
     armazenamento.salas.append(sala)
     return sala
+
+def listar_salas():
+    return list(armazenamento.salas)
