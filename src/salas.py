@@ -31,12 +31,11 @@ def cadastrar_sala(nome, capacidade, localizacao):
 def listar_salas():
     return list(armazenamento.salas)
 
-# Títulos das colunas da tabela de listagem
 TITULOS_LISTAGEM = ["ID", "Nome", "Capacidade", "Localização"]
 
 
 def _calcular_larguras(titulos, linhas):
-    """Devolve a largura de cada coluna: a do maior texto entre título e valores."""
+
     larguras = []
     for i, titulo in enumerate(titulos):
         valores = [len(linha[i]) for linha in linhas]
@@ -45,21 +44,15 @@ def _calcular_larguras(titulos, linhas):
 
 
 def _montar_linha(colunas, larguras):
-    """Junta as colunas de uma linha, preenchendo cada uma até a sua largura."""
     return "  ".join(
         coluna.ljust(largura) for coluna, largura in zip(colunas, larguras)
     ).rstrip()
 
 
 def formatar_listagem(lista_salas):
-    """Devolve um texto em forma de tabela com as salas informadas.
-
-    Se a lista estiver vazia, devolve uma mensagem avisando que não há salas.
-    """
     if not lista_salas:
         return "Não há salas disponíveis."
 
-    # Cada sala vira uma linha de textos, na mesma ordem dos títulos
     linhas = [
         [str(s["id"]), s["nome"], str(s["capacidade"]), s["localizacao"]]
         for s in lista_salas
