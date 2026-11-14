@@ -16,7 +16,7 @@ def cadastrar_sala(nome, capacidade, localizacao):
         raise ValueError("A capacidade deve ser um número inteiro maior que zero.")
 
     sala = {
-        "id": len(armazenamento.salas) + 1,
+        "id": armazenamento.gerar_id(),
         "nome": nome,
         "capacidade": capacidade,
         "localizacao": localizacao,
