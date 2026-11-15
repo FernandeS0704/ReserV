@@ -86,7 +86,7 @@ Estrutura de pastas conferida, ambiente virtual criado e dependências instalada
 - **Green:** criada `cadastrar_sala` em `src/salas.py` com o mínimo necessário (id provisório `len + 1`). Resultado: 1 passed.
 - **Refactor:** nada a melhorar nesta etapa.
 
-Evidências: ![Red](evidencias/ciclo1_red.jpg) ![Green](evidencias/ciclo1_green.png)
+Evidências: ![Red](evidencias/ciclo1/ciclo1_red.jpg) ![Green](evidencias/ciclo1/ciclo1_green.png)
 
 ### Ciclo 2 — Validações do cadastro
 
@@ -99,7 +99,7 @@ Evidências: ![Red](evidencias/ciclo1_red.jpg) ![Green](evidencias/ciclo1_green.
 - **Green:** validações de nome, localização e capacidade antes de gravar. Resultado: 9 passed.
 - **Refactor:** extraída a função `_texto_preenchido`, que eliminou a repetição entre nome e localização. 9 passed.
 
-Evidências: ![Red](evidencias/ciclo2_red.png) ![Red](evidencias/ciclo2_pt2_red.png) ![Green](evidencias/ciclo2_green.png) ![Refactor](evidencias/ciclo2_refactor.png)
+Evidências: ![Red](evidencias/ciclo2/ciclo2_red.png) ![Red](evidencias/ciclo2/ciclo2_pt2_red.png) ![Green](evidencias/ciclo2/ciclo2_green.png) ![Refactor](evidencias/ciclo2/ciclo2_refactor.png)
 
 ### Ciclo 3 — Várias salas e ids únicos
 
@@ -110,7 +110,7 @@ Evidências: ![Red](evidencias/ciclo2_red.png) ![Red](evidencias/ciclo2_pt2_red.
 - **Green:** criados `gerar_id()` e o contador `_proximo_id` em `armazenamento.py`; `reiniciar()` passou a zerar o contador. Resultado: 11 passed.
 - **Refactor:** extraída a função `_capacidade_valida`, deixando as três validações no mesmo padrão. 11 passed.
 
-Evidências: ![Red](evidencias/ciclo3_red.png) ![Red](evidencias/ciclo3_pt2_red.png) ![Green](evidencias/ciclo3_green.png) ![Refactor](evidencias/ciclo3_refactor.png)
+Evidências: ![Red](evidencias/ciclo3/ciclo3_red.png) ![Red](evidencias/ciclo3/ciclo3_pt2_red.png) ![Green](evidencias/ciclo3/ciclo3_green.png) ![Refactor](evidencias/ciclo3/ciclo3_refactor.png)
 
 ### Ciclo 4 — Listagem de salas
 
@@ -121,7 +121,7 @@ Evidências: ![Red](evidencias/ciclo3_red.png) ![Red](evidencias/ciclo3_pt2_red.
 - **Green:** criada `listar_salas()`, que devolve uma cópia da lista guardada. Resultado: 13 passed.
 - **Refactor:** nada a melhorar nesta etapa.
 
-Evidências: ![Red](evidencias/ciclo4_red.png) ![Green](evidencias/ciclo4_green.png)
+Evidências: ![Red](evidencias/ciclo4/ciclo4_red.png) ![Green](evidencias/ciclo4/ciclo4_green.png)
 
 ### Ciclo 5 — Formatação da listagem
 
@@ -133,7 +133,7 @@ Evidências: ![Red](evidencias/ciclo4_red.png) ![Green](evidencias/ciclo4_green.
 - **Green:** criadas `formatar_listagem` e `_montar_linha`, com a largura de cada coluna ajustada ao maior texto. Resultado: 16 passed.
 - **Refactor:** cálculo das larguras movido para `_calcular_larguras` e títulos reunidos na constante `TITULOS_LISTAGEM`. 16 passed.
 
-Evidências: ![Red](evidencias/ciclo5_red.png) ![Green](evidencias/ciclo5_green.png) ![Refactor](evidencias/ciclo5_refactor.png)
+Evidências: ![Red](evidencias/ciclo5/ciclo5_red.png) ![Green](evidencias/ciclo5/ciclo5_green.png) ![Refactor](evidencias/ciclo5/ciclo5_refactor.png)
 
 Exemplo de saída da listagem:
 
@@ -166,19 +166,19 @@ Arquivo `tests/features/cadastro_salas.feature`, escrito em português (`# langu
 - **Green:** implementados os passos (`@given`, `@when`, `@then`) em `tests/test_bdd_salas.py`, ligando cada frase às funções `cadastrar_sala`, `listar_salas` e `formatar_listagem`. Resultado: 9 passed.
 - **Refactor:** um único passo parametrizado atende todos os cenários de cadastro; nenhuma alteração adicional foi necessária.
 
-Evidências: ![Red BDD](evidencias/bdd_red.png) ![Green BDD](evidencias/bdd_green.png)
+Evidências: ![Red BDD](evidencias/bdd/bdd_red.png) ![Green BDD](evidencias/bdd/bdd_green.png)
 
 ## 7. Interface de terminal
 
 `src/interface.py` e `main.py` ligam as duas funcionalidades a um menu (1 - Cadastrar sala, 2 - Listar salas, 0 - Sair). A camada só usa `input` e `print`; as regras continuam em `salas.py`. Por ser uma camada de ligação, foi validada por execução manual do programa (`py main.py`), cobrindo: listagem vazia, cadastro válido, nome vazio, capacidade inválida, listagem alinhada, opção inválida e saída.
 
-Evidência: ![Menu](evidencias/menu_terminal.png)
+Evidência: ![Menu](evidencias/interface/menu_terminal.png)
 
 ## 8. Resultado final
 
 Suíte completa (`py -m pytest -v`): **25 testes passando** (16 de TDD e 9 de BDD).
 
-Evidência: ![Suíte completa](evidencias/suite_completa.png)
+Evidência: ![Suíte completa](evidencias/suite/suite_completa.png)
 
 ### Rastreabilidade dos requisitos
 
