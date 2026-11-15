@@ -1,3 +1,5 @@
+from datetime import date, datetime
+
 from src import armazenamento
 
 
@@ -27,6 +29,66 @@ def cadastrar_sala(nome, capacidade, localizacao):
     }
     armazenamento.salas.append(sala)
     return sala
+
+
+def buscar_sala_por_id(id_sala):
+    for sala in armazenamento.salas:
+        if sala["id"] == id_sala:
+            return sala
+    raise ValueError("Sala não encontrada.")
+
+
+def editar_sala(id_sala, nome=None, capacidade=None, localizacao=None):
+    sala = buscar_sala_por_id(id_sala)
+
+    if nome is not None and not _texto_preenchido(nome):
+        raise ValueError("O nome da sala é obrigatório.")
+
+    if localizacao is not None and not _texto_preenchido(localizacao):
+        raise ValueError("A localização da sala é obrigatória.")
+
+    if capacidade is not None and not _capacidade_valida(capacidade):
+        raise ValueError("A capacidade deve ser um número inteiro maior que zero.")
+
+    if nome is not None:
+        sala["nome"] = nome
+    if capacidade is not None:
+        sala["capacidade"] = capacidade
+    if localizacao is not None:
+        sala["localizacao"] = localizacao
+
+    return sala
+
+
+def _converter_data(valor):
+    if isinstance(valor, datetime):
+        return valor
+    if isinstance(valor, date):
+        return datetime.combine(valor, datetime.min.time())
+    if isinstance(valor, str):
+        return datetime.fromisoformat(valor)
+    return None
+
+
+def _tem_reservas_futuras(id_sala, agora=None):
+    if agora is None:
+        agora = datetime.now()
+    for reserva in getattr(armazenamento, "reservas", []):
+        if reserva.get("sala_id") == id_sala:
+            fim = reserva.get("data_fim") or reserva.get("data") or reserva.get("data_inicio")
+            data_dt = _converter_data(fim)
+            if data_dt and data_dt >= agora:
+                return True
+    return False
+
+
+def excluir_sala(id_sala):
+    sala = buscar_sala_por_id(id_sala)
+    if _tem_reservas_futuras(id_sala):
+        raise ValueError("Não é possível excluir a sala: existem reservas futuras associadas.")
+    armazenamento.salas.remove(sala)
+    return True
+
 
 def listar_salas():
     return list(armazenamento.salas)
