@@ -1,20 +1,31 @@
 # ReserV — Sistema de Agendamento e Reserva de Salas
 
-Sistema de terminal em Python para gerenciar salas e reservas. Este repositório contém a parte do **Integrante 1** (cadastro e listagem de salas), desenvolvida com TDD (pytest) e BDD (pytest-bdd).
+Sistema de terminal em Python para cadastro e gerenciamento de salas e reservas. Os dados ficam em memória e são apagados ao encerrar o programa.
 
-## Funcionalidades desta parte
+## Funcionalidades e responsáveis
 
-1. **Cadastrar sala:** nome, capacidade máxima e localização (todos obrigatórios; capacidade inteira maior que zero; id único gerado automaticamente).
-2. **Listar salas:** exibe id, nome, capacidade e localização em uma tabela alinhada, ou informa que não há salas disponíveis.
+### Implementadas
 
-Os dados ficam **somente em memória** e são perdidos ao fechar o programa.
+| Integrante | Funcionalidades |
+|---|---|
+| Arthur — Integrante 1 | Cadastrar salas e listar salas cadastradas. O cadastro valida nome, capacidade e localização. |
+| Vitor — Integrante 2 | Editar salas e excluir salas. A exclusão é bloqueada quando há reservas futuras ativas. |
+| Djames — Integrante 3 | Realizar reservas e cancelar reservas. O sistema valida sala, campos obrigatórios e conflito de horário. |
+
+### Planejadas
+
+| Integrantes | Funcionalidades |
+|---|---|
+| Gustavo e Pedro | Consultar a disponibilidade das salas por data e horário; listar reservas com sala, data e horário. A divisão dessas duas tarefas entre eles ainda será combinada. |
+
+As consultas ainda serão implementadas. Os cenários, testes e opções de menu correspondentes serão adicionados seguindo a estrutura já usada nas partes de Arthur, Vitor e Djames.
 
 ## Requisitos
 
 - Python 3.10 ou superior
-- Dependências: `pytest` e `pytest-bdd` (listadas em `requirements.txt`)
+- Dependências `pytest` e `pytest-bdd`, listadas em `requirements.txt`
 
-## Instalação (Windows, PowerShell)
+## Instalação no Windows
 
 ```powershell
 python -m venv venv
@@ -22,55 +33,73 @@ venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 ```
 
-Em Linux/Mac, ative o ambiente com `source venv/bin/activate`.
+No Linux ou macOS, ative o ambiente com `source venv/bin/activate`.
 
 ## Executar o sistema
 
 ```powershell
-py main.py
+python main.py
 ```
 
-Menu:
+Opções atuais do menu:
 
-```
-=== Sistema de Agendamento e Reserva de Salas ===
+```text
 1 - Cadastrar sala
 2 - Listar salas
+3 - Editar sala
+4 - Excluir sala
+5 - Realizar reserva
+6 - Cancelar reserva
 0 - Sair
 ```
 
 ## Executar os testes
 
 ```powershell
-py -m pytest -v                          # todos os testes (TDD e BDD)
-py -m pytest tests\test_cadastro_salas.py -v
-py -m pytest tests\test_listagem_salas.py -v
-py -m pytest tests\test_bdd_salas.py -v  # cenários BDD
+python -m pytest -v
+python -m pytest tests/test_cadastro_salas.py -v
+python -m pytest tests/test_listagem_salas.py -v
+python -m pytest tests/test_edicao_salas.py -v
+python -m pytest tests/test_exclusao_salas.py -v
+python -m pytest tests/test_reservas.py -v
+python -m pytest tests/test_cancelamento_reservas.py -v
+python -m pytest tests/test_integracao_reservas_exclusao.py -v
+python -m pytest tests/test_bdd_salas.py -v
+python -m pytest tests/test_bdd_edicao_exclusao.py -v
+python -m pytest tests/test_bdd_reservas.py -v
 ```
 
-## Estrutura
+## Estrutura principal
 
-```
-main.py                      ponto de entrada
+```text
+main.py
 src/
-  armazenamento.py           lista de salas em memória e gerador de id
-  salas.py                   regras: cadastrar_sala, listar_salas, formatar_listagem
-  interface.py               menu do terminal
+  armazenamento.py
+  salas.py
+  reservas.py
+  interface.py
 tests/
-  conftest.py                zera o armazenamento entre os testes
-  test_cadastro_salas.py     testes TDD do cadastro
-  test_listagem_salas.py     testes TDD da listagem
-  test_bdd_salas.py          passos dos cenários BDD
-  features/cadastro_salas.feature   cenários em Gherkin
+  test_cadastro_salas.py
+  test_listagem_salas.py
+  test_edicao_salas.py
+  test_exclusao_salas.py
+  test_reservas.py
+  test_cancelamento_reservas.py
+  test_integracao_reservas_exclusao.py
+  test_bdd_salas.py
+  test_bdd_edicao_exclusao.py
+  test_bdd_reservas.py
+  features/
 docs/
-  registro_tdd.md            registro dos ciclos TDD/BDD com evidências
+  arthur/
+  vitor/
+  djames/
 ```
 
-## Para os outros integrantes
+Cada parte mantém seu relatório TDD/BDD e suas evidências na pasta correspondente em `docs/`. As consultas de Gustavo e Pedro ainda não têm arquivos de implementação.
 
-- Formato de cada sala: `{"id": int, "nome": str, "capacidade": int, "localizacao": str}`.
-- Os dados ficam na lista `armazenamento.salas`. Acesse sempre por `from src import armazenamento` e `armazenamento.salas`.
-- Para editar ou excluir uma sala, altere ou remova o item dessa lista. Os ids **não são reaproveitados**.
-- `cadastrar_sala(nome, capacidade, localizacao)` devolve a sala criada ou levanta `ValueError` com mensagem clara.
-- `listar_salas()` devolve uma cópia da lista; `formatar_listagem(lista)` devolve o texto da tabela.
-- Para incluir novas opções no menu, edite `exibir_menu()` e `executar()` em `src/interface.py`.
+## Dados compartilhados
+
+- Salas: `armazenamento.salas`, com `id`, `nome`, `capacidade` e `localizacao`.
+- Reservas: `armazenamento.reservas`, com `id`, `sala_id`, `responsavel`, `data`, `horario` e `status`.
+- Os IDs são gerados por `armazenamento.gerar_id()` e `armazenamento.gerar_id_reserva()` e são reiniciados nos testes por `armazenamento.reiniciar()`.
