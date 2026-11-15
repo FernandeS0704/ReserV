@@ -66,7 +66,14 @@ def _converter_data(valor):
     if isinstance(valor, date):
         return datetime.combine(valor, datetime.min.time())
     if isinstance(valor, str):
-        return datetime.fromisoformat(valor)
+        try:
+            return datetime.fromisoformat(valor)
+        except ValueError:
+            try:
+                data = datetime.strptime(valor, "%d/%m/%Y")
+            except ValueError:
+                return None
+            return data.replace(hour=23, minute=59, second=59, microsecond=999999)
     return None
 
 
@@ -74,6 +81,8 @@ def _tem_reservas_futuras(id_sala, agora=None):
     if agora is None:
         agora = datetime.now()
     for reserva in getattr(armazenamento, "reservas", []):
+        if reserva.get("status") == "cancelada":
+            continue
         if reserva.get("sala_id") == id_sala:
             fim = reserva.get("data_fim") or reserva.get("data") or reserva.get("data_inicio")
             data_dt = _converter_data(fim)
