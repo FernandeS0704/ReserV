@@ -1,6 +1,6 @@
 import pytest
 
-from src.buscas import buscar_salas
+from src.buscas import buscar_salas, formatar_resultado_busca
 from src.salas import cadastrar_sala
 
 
@@ -76,3 +76,26 @@ def test_nao_buscar_com_capacidade_minima_invalida(valor):
 def test_nao_buscar_com_localizacao_invalida(valor):
     with pytest.raises(ValueError, match="localização"):
         buscar_salas(localizacao=valor)
+
+
+def test_formatar_resultado_vazio_informa_que_nenhuma_sala_foi_encontrada():
+    texto = formatar_resultado_busca([])
+
+    assert "nenhuma sala encontrada" in texto.lower()
+
+
+def test_formatar_resultado_mostra_tabela_das_salas():
+    cadastrar_sala("Sala 01", 20, "Bloco A")
+    cadastrar_sala("Laboratório de Informática", 35, "Bloco B")
+
+    linhas = formatar_resultado_busca(buscar_salas(capacidade_minima=10)).splitlines()
+
+    for titulo in ["ID", "Nome", "Capacidade", "Localização"]:
+        assert titulo in linhas[0]
+
+    assert len(linhas) == 4
+
+    for texto in ["1", "Sala 01", "20", "Bloco A"]:
+        assert texto in linhas[2]
+    for texto in ["2", "Laboratório de Informática", "35", "Bloco B"]:
+        assert texto in linhas[3]
