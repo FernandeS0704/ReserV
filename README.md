@@ -12,6 +12,7 @@ Sistema de terminal em Python para cadastro e gerenciamento de salas e reservas.
 | Vitor — Integrante 2 | Editar salas e excluir salas. A exclusão é bloqueada quando há reservas futuras ativas. |
 | Djames — Integrante 3 | Realizar reservas e cancelar reservas. O sistema valida sala, campos obrigatórios e conflito de horário. |
 | Pedro — Integrante 4 | Consultar a disponibilidade das salas por data e horário e listar reservas com sala, data e horário. Reservas canceladas não ocupam a sala. |
+| Gustavo — Integrante 5 | Buscar salas por capacidade mínima e/ou localização e remarcar reservas para outra data e horário. A remarcação reaproveita a regra de conflito das reservas e recusa reservas inexistentes ou canceladas. |
 
 ## Requisitos
 
@@ -45,6 +46,8 @@ Opções atuais do menu:
 6 - Cancelar reserva
 7 - Consultar disponibilidade
 8 - Listar reservas
+9 - Buscar salas
+10 - Remarcar reserva
 0 - Sair
 ```
 
@@ -65,6 +68,9 @@ python -m pytest tests/test_bdd_salas.py -v
 python -m pytest tests/test_bdd_edicao_exclusao.py -v
 python -m pytest tests/test_bdd_reservas.py -v
 python -m pytest tests/test_bdd_consultas.py -v
+python -m pytest tests/test_busca_salas.py -v
+python -m pytest tests/test_remarcacao_reservas.py -v
+python -m pytest tests/test_bdd_busca_remarcacao.py -v
 ```
 
 ## Estrutura principal
@@ -76,6 +82,8 @@ src/
   salas.py
   reservas.py
   consultas.py
+  buscas.py
+  remarcacao.py
   interface.py
 tests/
   test_cadastro_salas.py
@@ -91,12 +99,16 @@ tests/
   test_bdd_edicao_exclusao.py
   test_bdd_reservas.py
   test_bdd_consultas.py
+  test_busca_salas.py
+  test_remarcacao_reservas.py
+  test_bdd_busca_remarcacao.py
   features/
 docs/
   arthur/
   vitor/
   djames/
   pedro/
+  gustavo/
 ```
 
 Cada parte mantém seu relatório TDD/BDD e suas evidências na pasta correspondente em `docs/`.
