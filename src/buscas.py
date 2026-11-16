@@ -1,5 +1,7 @@
 from src import armazenamento
-from src.salas import _texto_preenchido
+from src.salas import _texto_preenchido, formatar_listagem
+
+MENSAGEM_SEM_RESULTADO = "Nenhuma sala encontrada para os critérios informados."
 
 
 def _capacidade_minima_valida(valor):
@@ -35,3 +37,9 @@ def buscar_salas(capacidade_minima=None, localizacao=None):
         for sala in armazenamento.salas
         if _atende_criterios(sala, capacidade_minima, localizacao)
     ]
+
+
+def formatar_resultado_busca(lista_salas):
+    if not lista_salas:
+        return MENSAGEM_SEM_RESULTADO
+    return formatar_listagem(lista_salas)
