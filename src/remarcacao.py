@@ -1,4 +1,9 @@
-from src.reservas import _buscar_reserva, _sala_existe, _texto_obrigatorio
+from src.reservas import (
+    _buscar_reserva,
+    _existe_conflito,
+    _sala_existe,
+    _texto_obrigatorio,
+)
 
 
 def remarcar_reserva(reserva_id, nova_data, novo_horario):
@@ -15,6 +20,9 @@ def remarcar_reserva(reserva_id, nova_data, novo_horario):
 
     if reserva["data"] == nova_data and reserva["horario"] == novo_horario:
         raise ValueError("A reserva já está nesta data e horário.")
+
+    if _existe_conflito(reserva["sala_id"], nova_data, novo_horario):
+        raise ValueError("O horário já está reservado para esta sala.")
 
     reserva["data"] = nova_data
     reserva["horario"] = novo_horario
