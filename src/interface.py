@@ -7,6 +7,7 @@ from src.salas import (
     listar_salas,
 )
 from src.reservas import cancelar_reserva, realizar_reserva
+from src.consultas import consultar_disponibilidade, formatar_reservas, listar_reservas
 
 
 def _converter_inteiro(texto):
@@ -123,6 +124,25 @@ def opcao_cancelar_reserva():
         print("Reserva cancelada com sucesso!")
 
 
+def opcao_consultar_disponibilidade():
+    print("\n--- Consultar disponibilidade ---")
+    data = input("Data: ")
+    horario = input("Horário: ")
+
+    try:
+        salas = consultar_disponibilidade(data, horario)
+    except ValueError as erro:
+        print(f"Não foi possível consultar: {erro}")
+    else:
+        print(f"Salas disponíveis em {data.strip()} ({horario.strip()}):")
+        print(formatar_listagem(salas))
+
+
+def opcao_listar_reservas():
+    print("\n--- Reservas realizadas ---")
+    print(formatar_reservas(listar_reservas()))
+
+
 def exibir_menu():
     print("\n=== Sistema de Agendamento e Reserva de Salas ===")
     print("1 - Cadastrar sala")
@@ -131,6 +151,8 @@ def exibir_menu():
     print("4 - Excluir sala")
     print("5 - Realizar reserva")
     print("6 - Cancelar reserva")
+    print("7 - Consultar disponibilidade")
+    print("8 - Listar reservas")
     print("0 - Sair")
 
 
@@ -151,6 +173,10 @@ def executar():
             opcao_realizar_reserva()
         elif opcao == "6":
             opcao_cancelar_reserva()
+        elif opcao == "7":
+            opcao_consultar_disponibilidade()
+        elif opcao == "8":
+            opcao_listar_reservas()
         elif opcao == "0":
             print("Encerrando o sistema.")
             break

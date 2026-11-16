@@ -11,14 +11,7 @@ Sistema de terminal em Python para cadastro e gerenciamento de salas e reservas.
 | Arthur — Integrante 1 | Cadastrar salas e listar salas cadastradas. O cadastro valida nome, capacidade e localização. |
 | Vitor — Integrante 2 | Editar salas e excluir salas. A exclusão é bloqueada quando há reservas futuras ativas. |
 | Djames — Integrante 3 | Realizar reservas e cancelar reservas. O sistema valida sala, campos obrigatórios e conflito de horário. |
-
-### Planejadas
-
-| Integrantes | Funcionalidades |
-|---|---|
-| Gustavo e Pedro | Consultar a disponibilidade das salas por data e horário; listar reservas com sala, data e horário. A divisão dessas duas tarefas entre eles ainda será combinada. |
-
-As consultas ainda serão implementadas. Os cenários, testes e opções de menu correspondentes serão adicionados seguindo a estrutura já usada nas partes de Arthur, Vitor e Djames.
+| Pedro — Integrante 4 | Consultar a disponibilidade das salas por data e horário e listar reservas com sala, data e horário. Reservas canceladas não ocupam a sala. |
 
 ## Requisitos
 
@@ -50,6 +43,8 @@ Opções atuais do menu:
 4 - Excluir sala
 5 - Realizar reserva
 6 - Cancelar reserva
+7 - Consultar disponibilidade
+8 - Listar reservas
 0 - Sair
 ```
 
@@ -64,9 +59,12 @@ python -m pytest tests/test_exclusao_salas.py -v
 python -m pytest tests/test_reservas.py -v
 python -m pytest tests/test_cancelamento_reservas.py -v
 python -m pytest tests/test_integracao_reservas_exclusao.py -v
+python -m pytest tests/test_disponibilidade.py -v
+python -m pytest tests/test_listagem_reservas.py -v
 python -m pytest tests/test_bdd_salas.py -v
 python -m pytest tests/test_bdd_edicao_exclusao.py -v
 python -m pytest tests/test_bdd_reservas.py -v
+python -m pytest tests/test_bdd_consultas.py -v
 ```
 
 ## Estrutura principal
@@ -77,6 +75,7 @@ src/
   armazenamento.py
   salas.py
   reservas.py
+  consultas.py
   interface.py
 tests/
   test_cadastro_salas.py
@@ -86,17 +85,21 @@ tests/
   test_reservas.py
   test_cancelamento_reservas.py
   test_integracao_reservas_exclusao.py
+  test_disponibilidade.py
+  test_listagem_reservas.py
   test_bdd_salas.py
   test_bdd_edicao_exclusao.py
   test_bdd_reservas.py
+  test_bdd_consultas.py
   features/
 docs/
   arthur/
   vitor/
   djames/
+  pedro/
 ```
 
-Cada parte mantém seu relatório TDD/BDD e suas evidências na pasta correspondente em `docs/`. As consultas de Gustavo e Pedro ainda não têm arquivos de implementação.
+Cada parte mantém seu relatório TDD/BDD e suas evidências na pasta correspondente em `docs/`.
 
 ## Dados compartilhados
 
