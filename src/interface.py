@@ -8,6 +8,8 @@ from src.salas import (
 )
 from src.reservas import cancelar_reserva, realizar_reserva
 from src.consultas import consultar_disponibilidade, formatar_reservas, listar_reservas
+from src.buscas import buscar_salas, formatar_resultado_busca
+from src.remarcacao import remarcar_reserva
 
 
 def _converter_inteiro(texto):
@@ -143,6 +145,39 @@ def opcao_listar_reservas():
     print(formatar_reservas(listar_reservas()))
 
 
+def opcao_buscar_salas():
+    print("\n--- Buscar salas ---")
+    texto_capacidade = input("Capacidade mínima (Enter para ignorar): ").strip()
+    texto_localizacao = input("Localização (Enter para ignorar): ").strip()
+
+    capacidade_minima = _converter_inteiro(texto_capacidade) if texto_capacidade else None
+    localizacao = texto_localizacao if texto_localizacao else None
+
+    try:
+        salas = buscar_salas(capacidade_minima=capacidade_minima, localizacao=localizacao)
+    except ValueError as erro:
+        print(f"Não foi possível buscar: {erro}")
+    else:
+        print(formatar_resultado_busca(salas))
+
+
+def opcao_remarcar_reserva():
+    print("\n--- Remarcar reserva ---")
+    reserva_id = _converter_inteiro(input("ID da reserva: ").strip())
+    nova_data = input("Nova data: ")
+    novo_horario = input("Novo horário: ")
+
+    try:
+        reserva = remarcar_reserva(reserva_id, nova_data, novo_horario)
+    except ValueError as erro:
+        print(f"Não foi possível remarcar: {erro}")
+    else:
+        print(
+            f"Reserva {reserva['id']} remarcada para "
+            f"{reserva['data']} ({reserva['horario']})!"
+        )
+
+
 def exibir_menu():
     print("\n=== Sistema de Agendamento e Reserva de Salas ===")
     print("1 - Cadastrar sala")
@@ -153,6 +188,8 @@ def exibir_menu():
     print("6 - Cancelar reserva")
     print("7 - Consultar disponibilidade")
     print("8 - Listar reservas")
+    print("9 - Buscar salas")
+    print("10 - Remarcar reserva")
     print("0 - Sair")
 
 
@@ -177,6 +214,10 @@ def executar():
             opcao_consultar_disponibilidade()
         elif opcao == "8":
             opcao_listar_reservas()
+        elif opcao == "9":
+            opcao_buscar_salas()
+        elif opcao == "10":
+            opcao_remarcar_reserva()
         elif opcao == "0":
             print("Encerrando o sistema.")
             break
