@@ -91,3 +91,36 @@ def test_nao_remarcar_reserva_de_sala_que_foi_excluida():
 
     with pytest.raises(ValueError, match="Sala não encontrada"):
         remarcar_reserva(reserva["id"], "21/11/2026", "14:00-15:00")
+
+
+def test_nao_remarcar_para_horario_ocupado_por_outra_reserva():
+    sala = cadastrar_sala("Sala 01", 20, "Bloco A")
+    reserva = realizar_reserva(sala["id"], "Gustavo", "20/11/2026", "10:00-11:00")
+    realizar_reserva(sala["id"], "Pedro", "20/11/2026", "14:00-15:00")
+
+    with pytest.raises(ValueError, match="reservado"):
+        remarcar_reserva(reserva["id"], "20/11/2026", "14:00-15:00")
+
+    assert (reserva["data"], reserva["horario"]) == ("20/11/2026", "10:00-11:00")
+
+
+def test_remarcar_para_horario_ocupado_em_outra_sala_e_permitido():
+    sala1 = cadastrar_sala("Sala 01", 20, "Bloco A")
+    sala2 = cadastrar_sala("Sala 02", 20, "Bloco A")
+    reserva = realizar_reserva(sala1["id"], "Gustavo", "20/11/2026", "10:00-11:00")
+    realizar_reserva(sala2["id"], "Pedro", "20/11/2026", "14:00-15:00")
+
+    resultado = remarcar_reserva(reserva["id"], "20/11/2026", "14:00-15:00")
+
+    assert resultado["horario"] == "14:00-15:00"
+
+
+def test_remarcar_para_horario_de_reserva_cancelada_e_permitido():
+    sala = cadastrar_sala("Sala 01", 20, "Bloco A")
+    reserva = realizar_reserva(sala["id"], "Gustavo", "20/11/2026", "10:00-11:00")
+    outra = realizar_reserva(sala["id"], "Pedro", "20/11/2026", "14:00-15:00")
+    cancelar_reserva(outra["id"])
+
+    resultado = remarcar_reserva(reserva["id"], "20/11/2026", "14:00-15:00")
+
+    assert resultado["horario"] == "14:00-15:00"
